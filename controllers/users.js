@@ -1,6 +1,17 @@
 const bcrypt = require('bcryptjs'); // для хеширования пароля
 const jwt = require('jsonwebtoken'); // для создания токина
 const User = require('../models/users');
+const Conflict = require('../errors/Conflict');
+const BadRequest = require('../errors/BadRequest');
+const Unauthorized = require('../errors/Unauthorized');
+const NotFoundError = require('../errors/BadRequest');
+const {
+  emailConflict,
+  unfilledEmailAndPassword,
+  unauthorizedUser,
+  notFoundedUser,
+  invalidFormat,
+} = require('../errors/errorsMessages');
 
 const { JWT_SECRET = 'secret-key' } = process.env;
 
@@ -13,7 +24,7 @@ module.exports.createUser = (req, res, next) => { // signup
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        // next(new Conflict('Подльзователь с такой почтой уже существует!'));
+        next(new Conflict(emailConflict));
       } bcrypt.hash(password, 10) // хешируем пароль
         .then((hash) => User.create({
           name,
@@ -26,7 +37,7 @@ module.exports.createUser = (req, res, next) => { // signup
         }))
         .catch((error) => {
           if (error.name === 'ValidationError') {
-            // next(new BadRequest('Поле email и password должны быть обязательно заполненны'));
+            next(new BadRequest(unfilledEmailAndPassword));
           } next(error);
         });
     });
@@ -40,7 +51,7 @@ module.exports.login = (req, res, next) => { // signin
       bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            // next(new Unauthorized('Передан неккоректный пароль'));
+            next(new Unauthorized(unauthorizedUser));
           } const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }); // создаем токен
           res
             .cookie('jwt', token, { // создаем куки при правильной аутентификации
@@ -49,15 +60,15 @@ module.exports.login = (req, res, next) => { // signin
               maxAge: 3600000 * 24 * 7,
             })
             .status(201).send({
-              message: 'Аутентификация прошла успешно',
+              message: 'Successful authentication',
             });
         });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        // next(new BadRequest('Поле email или password не должны быть пустыми'));
+        next(new BadRequest(unfilledEmailAndPassword));
       } else {
-        // next(new Unauthorized('Передан неккоректный email'));
+        next(new Unauthorized(unauthorizedUser));
       } next(err);
     });
 };
@@ -65,12 +76,12 @@ module.exports.login = (req, res, next) => { // signin
 module.exports.getCurrentUser = (req, res, next) => { // получаем информацию о себе
   User.findById(req.user._id)
     .orFail(() => {
-      // throw next(new NotFoundError('Пользователь по заданному id отсутствует'));
+      throw next(new NotFoundError(notFoundedUser));
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.kind === 'ObjectId') {
-        // next(new BadRequest('Неверный формат id'));
+        next(new BadRequest(invalidFormat));
       } next(err);
     });
 };
@@ -86,12 +97,12 @@ module.exports.updateUser = (req, res, next) => {
     },
   )
     .orFail(() => {
-      // throw next(new NotFoundError('Пользователь по заданному id отсутствует'));
+      throw next(new NotFoundError(notFoundedUser));
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        // next(new BadRequest('Оба поля должны быть заполненны!'));
+        next(new BadRequest(unfilledEmailAndPassword));
       } else {
         next(err);
       }
