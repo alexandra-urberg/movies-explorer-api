@@ -25,16 +25,14 @@ const movieSchema = new mongoose.Schema({
     type: String,
     default: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2670&q=80',
     required: true,
-    contentType: URL,
   },
   trailer: {
     type: String,
     required: true,
-    contentType: URL,
   },
   thumbnail: {
+    type: String,
     required: true,
-    contentType: URL,
   },
   owner: {
     ref: 'user',
@@ -42,8 +40,9 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: [mongoose.Schema.Types.ObjectId],
-    default: [],
+    type: String,
+    required: true,
+    minlength: 2,
   },
   nameRU: {
     type: String,
