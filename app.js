@@ -1,11 +1,41 @@
+require('dotenv').config(); // для секретного ключа
 const express = require('express');
-const { PORT } = require('./utils/appConfig');
+const { errors } = require('celebrate');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+const { PORT, DB } = require('./utils/appConfig');
 const rateLimiter = require('./utils/rateLimiter');
+const router = require('./routes/index');
+const ErrorsHandler = require('./middlewares/errors');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
+app.use(helmet());
+
 app.use(rateLimiter);
+app.use(cookieParser());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+mongoose.connect(DB, {
+  useNewUrlParser: true,
+  // I have the latest version of mangoose
+  // where (useCreateIndex: true) and (useFindAndModify: false) are default manuals
+  // useCreateIndex: true,
+  useUnifiedTopology: true,
+  // useFindAndModify: false,
+});
+
+app.use(requestLogger);
+
+app.use(router);
+
+app.use(errorLogger);
+app.use(errors());
+app.use(ErrorsHandler);
 
 app.listen(PORT, () => {
-  // Если всё работает, консоль покажет, какой порт приложение слушает
   console.log(`App listening on port ${PORT}`);
 });
