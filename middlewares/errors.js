@@ -1,4 +1,4 @@
-const errorsHandler = (err, req, res, next) => {
+const ErrorsHandler = (err, req, res, next) => {
   const status = err.statusCode;
   const response = err.message;
 
@@ -7,4 +7,4 @@ const errorsHandler = (err, req, res, next) => {
   next();
 };
 
-module.exports = errorsHandler;
+module.exports = ErrorsHandler;
