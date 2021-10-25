@@ -6,14 +6,14 @@ const BadRequest = require('../errors/BadRequest');
 const Unauthorized = require('../errors/Unauthorized');
 const NotFoundError = require('../errors/BadRequest');
 const {
+  unfilledEmailPasswordAndName,
   emailConflict,
   unfilledEmailAndPassword,
   unauthorizedUser,
   notFoundedUser,
   invalidFormat,
 } = require('../errors/errorsMessages');
-
-const { JWT_SECRET = 'secret-key' } = process.env;
+const { JWT_SECRET } = require('../utils/appConfig');
 
 module.exports.createUser = (req, res, next) => { // signup
   const {
@@ -37,7 +37,7 @@ module.exports.createUser = (req, res, next) => { // signup
         }))
         .catch((error) => {
           if (error.name === 'ValidationError') {
-            next(new BadRequest(unfilledEmailAndPassword));
+            next(new BadRequest(unfilledEmailPasswordAndName));
           } next(error);
         });
     });
@@ -71,6 +71,10 @@ module.exports.login = (req, res, next) => { // signin
         next(new Unauthorized(unauthorizedUser));
       } next(err);
     });
+};
+
+module.exports.signOut = (req, res) => {
+  res.clearCookie('jwt').send('Cookie deleted');
 };
 
 module.exports.getCurrentUser = (req, res, next) => { // получаем информацию о себе
