@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
-    "start": "node  app.js",
+    "start": "node app.js",
     "lint": "npx eslint ."
   },
   "repository": {
@@ -27,10 +27,12 @@
     "editorconfig": "^0.15.3",
     "express": "^4.17.1",
     "express-rate-limit": "^5.5.0",
+    "express-winston": "^4.2.0",
     "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.11",
-    "validator": "^13.6.0"
+    "validator": "^13.6.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^8.0.1",
