@@ -2,6 +2,7 @@ const router = require('express').Router();
 const {
   updateUser,
   getCurrentUser,
+  signOut,
 } = require('../controllers/users'); // контроллеры пользователя
 
 const {
@@ -10,5 +11,6 @@ const {
 
 router.get('/users/me', getCurrentUser); // запрос на получение данных данного пользователя
 router.patch('/users/me', updateUser, changeInformationValidation);
+router.get('/signout', signOut);
 
-module.export = router;
+module.exports = router;
