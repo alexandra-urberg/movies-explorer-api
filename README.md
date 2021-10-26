@@ -1,5 +1,6 @@
 # Movies-explorer-api
 This is the final project/diploma for Yandex-Practicum Bootcamp(backend version).
+
 The backend built to registrate and authorized user, update users information, choose a film from other server and add/delete to/from users wall.
 
 **The following stack was used during development of the project:**
