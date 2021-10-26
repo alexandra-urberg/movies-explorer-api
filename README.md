@@ -20,17 +20,23 @@ Backend locatead at the subdomain. Due to that, the cors settings locatead at th
 Backend setupted to automatic, constant work. In case of server reboat database and other stack will restart automatically.
 
 **[Link to the project https://api.nomoredomains.diploma.nomoredomains.rocks](https://api.nomoredomains.diploma.nomoredomains.rocks).**
+
 **Publick IP 84.201.164.95**
 
 **Startup commands**
 To start the server
 ```sh
-npm run start or npm run dev
+npm run start
+```
+or 
+```sh
+npm run dev
 ```
 To start eslint
 ```sh
 npm run lint
 ```
+
 
 Prepared by
 Alexandra Stepanova
