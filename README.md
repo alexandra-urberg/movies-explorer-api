@@ -24,6 +24,7 @@ Backend setupted to automatic, constant work. In case of server reboat database 
 **Publick IP 84.201.164.95**
 
 **Startup commands**
+
 To start the server
 ```sh
 npm run start
@@ -32,6 +33,7 @@ or
 ```sh
 npm run dev
 ```
+
 To start eslint
 ```sh
 npm run lint
