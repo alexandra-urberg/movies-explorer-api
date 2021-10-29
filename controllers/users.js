@@ -11,7 +11,7 @@ const {
   unfilledEmailAndPassword,
   unauthorizedUser,
   notFoundedUser,
-  invalidFormat,
+  blankEmailField,
 } = require('../errors/errorsMessages');
 const { JWT_SECRET } = require('../utils/appConfig');
 
@@ -40,7 +40,8 @@ module.exports.createUser = (req, res, next) => { // signup
             next(new BadRequest(unfilledEmailPasswordAndName));
           } next(error);
         });
-    });
+    })
+    .catch(next);
 };
 
 module.exports.login = (req, res, next) => { // signin
@@ -48,20 +49,18 @@ module.exports.login = (req, res, next) => { // signin
 
   User.findOne({ email }).select('+password')
     .then((user) => {
-      bcrypt.compare(password, user.password)
-        .then((matched) => {
-          if (!matched) {
-            next(new Unauthorized(unauthorizedUser));
-          } const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }); // создаем токен
-          res
-            .cookie('jwt', token, { // создаем куки при правильной аутентификации
-              httpOnly: true,
-              sameSite: true,
-              maxAge: 3600000 * 24 * 7,
-            })
-            .status(201).send({
-              message: 'Successful authentication',
-            });
+      bcrypt.compare(password, user.password);
+      if (!user) {
+        next(new Unauthorized(unauthorizedUser));
+      } const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }); // создаем токен
+      res
+        .cookie('jwt', token, { // создаем куки при правильной аутентификации
+          httpOnly: true,
+          sameSite: true,
+          maxAge: 3600000 * 24 * 7,
+        })
+        .status(201).send({
+          message: 'Successful authentication',
         });
     })
     .catch((err) => {
@@ -84,8 +83,8 @@ module.exports.getCurrentUser = (req, res, next) => { // получаем инф
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.kind === 'ObjectId') {
-        next(new BadRequest(invalidFormat));
+      if (err.kind === 11000) {
+        next(new Conflict(emailConflict));
       } next(err);
     });
 };
@@ -105,8 +104,12 @@ module.exports.updateUser = (req, res, next) => {
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.code === 11000) {
+        next(new Conflict(emailConflict));
+      } if (err.name === 'ValidationError') {
         next(new BadRequest(unfilledEmailAndPassword));
+      } else if (err.name === 'CastError') {
+        next(new BadRequest(blankEmailField));
       } else {
         next(err);
       }
