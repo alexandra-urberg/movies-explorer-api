@@ -13,6 +13,8 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const app = express();
 app.use(helmet());
 
+app.use(requestLogger);
+
 app.use(rateLimiter);
 app.use(cookieParser());
 
@@ -21,14 +23,12 @@ app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(DB, {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
   // I have the latest version of mangoose
   // where (useCreateIndex: true) and (useFindAndModify: false) are default manuals
   // useCreateIndex: true,
-  useUnifiedTopology: true,
   // useFindAndModify: false,
 });
-
-app.use(requestLogger);
 
 app.use(router);
 
