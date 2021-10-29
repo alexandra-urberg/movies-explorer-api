@@ -10,7 +10,7 @@ const {
 } = require('../middlewares/validation');
 
 router.get('/users/me', getCurrentUser); // запрос на получение данных данного пользователя
-router.patch('/users/me', updateUser, changeInformationValidation);
+router.patch('/users/me', changeInformationValidation, updateUser);
 router.get('/signout', signOut);
 
 module.exports = router;
