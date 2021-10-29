@@ -1,26 +1,35 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
+const {
+  invalidFormat,
+  blankNameField,
+  minLengtName,
+  maxLengtName,
+  blankEmailField,
+  blankPasswordField,
+  minLengtPassword,
+} = require('../errors/errorsMessages');
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Your username cannot be blank.'],
-    minlength: [2, 'Username must be at least 2 characters.'],
-    maxlength: [30, 'Username must be less than 30 characters.'],
+    required: [true, blankNameField],
+    minlength: [2, minLengtName],
+    maxlength: [30, maxLengtName],
   },
   email: {
     type: String,
     unique: true,
-    required: [true, 'Your e-mail cannot be blank.'],
+    required: [true, blankEmailField],
     validate: {
       validator: (v) => isEmail(v),
-      message: 'Неправильный формат почты',
+      message: invalidFormat,
     },
   },
   password: {
     type: String,
-    minlength: [8, 'Password must be at least 8 characters.'],
-    required: [true, 'Your password cannot be blank.'],
+    required: [true, blankPasswordField],
+    minlength: [8, minLengtPassword],
     select: false,
   },
 });

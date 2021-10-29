@@ -23,7 +23,6 @@ const movieSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    default: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2670&q=80',
     required: true,
   },
   trailer: {
@@ -40,7 +39,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: String,
+    type: Number,
     required: true,
     minlength: 2,
   },

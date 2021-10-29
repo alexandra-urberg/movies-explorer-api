@@ -43,12 +43,12 @@ module.exports.importMovieValidation = celebrate({
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
     thumbnail: Joi.string().required().custom(isUrl),
-    movieId: Joi.string().length(24).hex(),
+    movieId: Joi.number().required(),
   }),
 });
 
 module.exports.removeMovieValidation = celebrate({
   body: Joi.object().keys({
-    cardId: Joi.string().length(24).hex(),
+    movieId: Joi.number().required(),
   }),
 });
