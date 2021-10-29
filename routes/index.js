@@ -12,7 +12,7 @@ router.use('/', auth, require('./users'));
 router.use('/', auth, require('./movies'));
 
 router.use('*', (req, res, next) => {
-  next(NotFoundError(defaultError));
+  next(new NotFoundError(defaultError));
 });
 
 module.exports = router;
