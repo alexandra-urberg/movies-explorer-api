@@ -1,4 +1,5 @@
 const router = require('express').Router(); // роутеры
+const auth = require('../middlewares/auth');
 const {
   getMovies,
   addMovie,
@@ -10,8 +11,8 @@ const {
   removeMovieValidation,
 } = require('../middlewares/validation');
 
-router.get('/movies', getMovies);
-router.post('/movies', importMovieValidation, addMovie);
-router.delete('/movies/:movieId', removeMovieValidation, deleteMovie);
+router.get('/movies', auth, getMovies);
+router.post('/movies', auth, importMovieValidation, addMovie);
+router.delete('/movies/:movieId', auth, removeMovieValidation, deleteMovie);
 
 module.exports = router;
