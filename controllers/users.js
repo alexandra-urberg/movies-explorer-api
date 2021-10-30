@@ -49,18 +49,28 @@ module.exports.login = (req, res, next) => { // signin
 
   User.findOne({ email }).select('+password')
     .then((user) => {
-      bcrypt.compare(password, user.password);
-      if (!user) {
-        next(new Unauthorized(unauthorizedUser));
-      } const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }); // создаем токен
-      res
-        .cookie('jwt', token, { // создаем куки при правильной аутентификации
-          httpOnly: true,
-          sameSite: true,
-          maxAge: 3600000 * 24 * 7,
+      bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            next(new Unauthorized('Неверный логин или пароль'));
+            return;
+          } const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }); // создаем токен
+          res
+            .cookie('jwt', token, { // создаем куки при правильной аутентификации
+              httpOnly: true,
+              sameSite: true,
+              maxAge: 3600000 * 24 * 7,
+            })
+            .status(201).send({
+              message: 'Аутентификация прошла успешно',
+            });
         })
-        .status(201).send({
-          message: 'Successful authentication',
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            next(new BadRequest(unfilledEmailAndPassword));
+          } else {
+            next(new Unauthorized(unauthorizedUser));
+          }
         });
     })
     .catch((err) => {
