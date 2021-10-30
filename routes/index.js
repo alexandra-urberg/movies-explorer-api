@@ -8,8 +8,8 @@ const { defaultError } = require('../errors/errorsMessages');
 router.post('/signup', signUpValidation, createUser);
 router.post('/signin', signInValidation, login);
 
-router.use('/', auth, require('./users'));
-router.use('/', auth, require('./movies'));
+router.use('/users', auth, require('./users'));
+router.use('/movies', auth, require('./movies'));
 
 router.use('*', (req, res, next) => {
   next(new NotFoundError(defaultError));
