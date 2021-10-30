@@ -52,7 +52,7 @@ module.exports.login = (req, res, next) => { // signin
       bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            next(new Unauthorized('Неверный логин или пароль'));
+            next(new Unauthorized(unauthorizedUser));
             return;
           } const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' }); // создаем токен
           res
@@ -62,7 +62,7 @@ module.exports.login = (req, res, next) => { // signin
               maxAge: 3600000 * 24 * 7,
             })
             .status(201).send({
-              message: 'Аутентификация прошла успешно',
+              message: 'Successful authentication',
             });
         })
         .catch((err) => {

@@ -9,6 +9,7 @@ module.exports.invalidFormat = 'Invalid id format';
 module.exports.incorrectData = 'The data is incorrect';
 module.exports.notFoundedMovie = 'The movie doesnt exist';
 module.exports.forbiddenToDelete = 'You cant delete this movie';
+module.exports.sucsessfulDelete = 'Movie sucsessfully deleted';
 // other
 module.exports.defaultError = 'The adress doesnt exist';
 // for user_model

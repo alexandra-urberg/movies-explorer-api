@@ -5,6 +5,7 @@ const {
   incorrectData,
   notFoundedMovie,
   forbiddenToDelete,
+  sucsessfulDelete,
 } = require('../errors/errorsMessages');
 
 module.exports.getMovies = (req, res, next) => {
@@ -63,7 +64,7 @@ module.exports.deleteMovie = (req, res, next) => {
         return movie.remove();
       } throw next(new BadRequest(forbiddenToDelete));
     })
-    .then(() => res.send({ message: 'Movie sucsessfully deleted' }))
+    .then(() => res.send(sucsessfulDelete))
     .catch((err) => {
       if (err === 'CastError') {
         next(new BadRequest(incorrectData));
