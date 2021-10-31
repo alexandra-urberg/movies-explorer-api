@@ -1,0 +1,43 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "The final project/diploma for Yandex-Practicum Bootcamp(backend version)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "lint": "npx eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexandra-stepanova/movies-explorer-api.git"
+  },
+  "author": "Alexandra Stepanova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexandra-stepanova/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/alexandra-stepanova/movies-explorer-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "celebrate": "^15.0.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^10.0.0",
+    "editorconfig": "^0.15.3",
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.5.0",
+    "express-winston": "^4.2.0",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.11",
+    "validator": "^13.6.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.14"
+  }
+}
