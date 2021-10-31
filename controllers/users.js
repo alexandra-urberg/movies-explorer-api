@@ -77,7 +77,7 @@ module.exports.login = (req, res, next) => { // signin
       if (err.name === 'ValidationError') {
         next(new BadRequest(unfilledEmailAndPassword));
       } else {
-        next(new Unauthorized(unauthorizedUser));
+        next(new Unauthorized(notFoundedUser));
       } next(err);
     });
 };
@@ -91,7 +91,12 @@ module.exports.getCurrentUser = (req, res, next) => { // получаем инф
     .orFail(() => {
       throw next(new NotFoundError(notFoundedUser));
     })
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        next(new Unauthorized(unauthorizedUser));
+        return;
+      }res.send({ data: user });
+    })
     .catch((err) => {
       if (err.kind === 11000) {
         next(new Conflict(emailConflict));
@@ -112,7 +117,12 @@ module.exports.updateUser = (req, res, next) => {
     .orFail(() => {
       throw next(new NotFoundError(notFoundedUser));
     })
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        next(new Unauthorized(unauthorizedUser));
+        return;
+      } res.send({ data: user });
+    })
     .catch((err) => {
       if (err.code === 11000) {
         next(new Conflict(emailConflict));

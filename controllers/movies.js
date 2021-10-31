@@ -45,7 +45,7 @@ module.exports.addMovie = (req, res, next) => {
     movieId,
     owner: req.user._id,
   })
-    .then((card) => res.send({ data: card }))
+    .then((movie) => res.send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest(incorrectData));
