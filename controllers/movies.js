@@ -10,7 +10,7 @@ const {
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
-    .then((movies) => res.send({ data: movies }))
+    .then((movies) => res.send(movies))
     .catch((err) => {
       next(err);
     });
@@ -55,7 +55,7 @@ module.exports.addMovie = (req, res, next) => {
 
 module.exports.deleteMovie = (req, res, next) => {
   const owner = req.user._id;
-  Movie.findById(req.params.movieId)
+  Movie.findById(req.params._id)
     .orFail(() => {
       throw next(new NotFound(notFoundedMovie));
     })
