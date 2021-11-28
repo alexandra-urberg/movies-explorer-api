@@ -7,7 +7,6 @@ const {
   notFoundedMovie,
   forbiddenToDelete,
   sucsessfulDelete,
-  notFoundedMovie,
 } = require('../errors/errorsMessages');
 
 module.exports.getMovies = (req, res, next) => {
@@ -56,7 +55,7 @@ module.exports.addMovie = (req, res, next) => {
     })
     .then((movie) => {
       const { _id } = movie;
-      return Movie.findById({ _id }).populate("owner");
+      return Movie.findById({ _id }).populate('owner');
     })
     .then((movie) => res.status(200).send(movie))
     .catch((err) => {
