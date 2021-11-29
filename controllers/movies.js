@@ -74,10 +74,10 @@ module.exports.deleteMovie = (req, res, next) => {
     })
     .then((movie) => {
       if (String(movie.owner) === owner) {
-        return movie.remove();
-      } throw next(new BadRequest(forbiddenToDelete));
+        return movie.remove()
+          .then(() => res.send(sucsessfulDelete));
+      } return next(new BadRequest(forbiddenToDelete));
     })
-    .then(() => res.send(sucsessfulDelete))
     .catch((err) => {
       if (err === 'CastError') {
         next(new BadRequest(incorrectData));
