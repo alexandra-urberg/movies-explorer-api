@@ -75,7 +75,7 @@ module.exports.deleteMovie = (req, res, next) => {
     .then((movie) => {
       if (String(movie.owner) === owner) {
         return movie.remove()
-          .then(() => res.send(sucsessfulDelete));
+          .then((deletedMovie) => res.status(200).send({ message: `${sucsessfulDelete}: '${deletedMovie.nameRU}'` }));
       } return next(new BadRequest(forbiddenToDelete));
     })
     .catch((err) => {
